@@ -1,0 +1,13 @@
+---SQL SCHEMA---
+CREATE DATABASE wallethub;
+
+CREATE TABLE IF NOT EXISTS wallethub.log (log_id BINARY(16), access_date TIMESTAMP, ip VARCHAR(15), request VARCHAR(50), status SMALLINT, user_agent VARCHAR(255), PRIMARY KEY (log_id));
+CREATE TABLE IF NOT EXISTS wallethub.log_execution (execution_id BINARY(16), execution_date TIMESTAMP, ip VARCHAR(15), access_log_path VARCHAR(100), start_date TIMESTAMP, duration VARCHAR(50), threshold SMALLINT ,PRIMARY KEY (execution_id, ip));
+
+
+--SQL QUERIES---
+select tmp.ip from 
+	(select count(*) as 'times', ip from wallethub.log where access_date > '2017-01-01.13:00:00' and access_date < '2017-01-01.14:00:00' group by ip) as tmp where tmp.times > 100;
+select tmp.ip from 
+	(select count(*) as 'times', ip from wallethub.log where access_date > '2017-01-01.00:00:00' and access_date < '2017-01-02.00:00:00' group by ip) as tmp where tmp.times > 500;
+select access_date,request,status,user_agent from wallethub.log where ip = '192.168.106.134';
